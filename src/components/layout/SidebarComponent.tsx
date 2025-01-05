@@ -14,7 +14,7 @@ export const SidebarComponent = () => {
   const navigate = useNavigate();
   
   return (
-    <div className="min-h-screen w-[200px] flex flex-col shadow-xl drop-shadow-xl">
+    <div className="w-[200px] h-screen flex flex-col shadow-xl drop-shadow-xl overflow-hidden">
       <div className="flex items-center justify-center py-6">
       <img
                                 src={TaskFill}
@@ -25,7 +25,7 @@ export const SidebarComponent = () => {
         <span className="text-2xl font-bold text-[#343C6A]">Soar Task</span>
       </div>
 
-      <nav className="flex-1 space-y-2 px-4">
+      <nav className="flex-1 space-y-2 px-4 overflow-y-auto">
         {[
           { icon: <Home size={20} />, label: "Dashboard",path:"/" },
           { icon: <ArrowRightLeft size={20} />, label: "Transactions" },

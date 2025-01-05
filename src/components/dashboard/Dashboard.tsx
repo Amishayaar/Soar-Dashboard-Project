@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import ChipCard from "../../assets/chip.svg";
+import CardNumber from "../../assets/rectangle.svg"
 import { Bar, BarChart, CartesianGrid, Tooltip, Legend, XAxis, YAxis, PieChart, Pie, AreaChart, Area, Cell } from "recharts";
 
 export const Dashboard = () => {
@@ -106,7 +107,13 @@ export const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
+                        <div
+                        className="h-[70px] w-[335px]"
+                        style={{
+                            background: "linear-gradient(90deg,rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%)",
+                        }}>
                         <p className="mt-2 text-sm">3778 **** 1234</p>
+                        </div>
                     </div>
 
                     <div className="p-4 text-white rounded-2xl w-[335px] h-[230px]"
