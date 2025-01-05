@@ -1,8 +1,16 @@
-import { ArrowRight } from "lucide-react";
 import Chip from "../../assets/Chip.png";
+import BlackChip from "../../assets/BlackChip.png";
 import Group from "../../assets/group.svg";
+import BlackGroup from "../../assets/BlackGroup.svg";
 
 import { Bar, BarChart, CartesianGrid, Tooltip, Legend, XAxis, YAxis,  Pie, AreaChart, Area, Cell, PieChart, Text } from "recharts";
+import { ChevronRight, Send } from "lucide-react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { useState } from "react";
+import liviaImage from "../../assets/livia.svg";
+import randyImage from "../../assets/randy.svg";
+import workmanImage from "../../assets/workman.svg";
 
 export const Dashboard = () => {
     const COLORS = ['#FC7900', '#343C6A', '#396AFF', '#232323'];
@@ -42,19 +50,49 @@ export const Dashboard = () => {
         { "name": "Dec", "value": 200 },
         { "name": "Jan", "value": 600 }
     ];
+    const users = [
+        {
+            ProfilePicture: liviaImage,
+            name: "Livia Bator",
+            position: "CEO"
+        },
+        {
+            ProfilePicture: randyImage,
+            name: "Randy Press",
+            position: "Director"
+        },
+        {
+            ProfilePicture: workmanImage,
+            name: "Workman",
+            position: "Designer"
+        }
+    ];
+    const [amount, setAmount] = useState<string>('')
+
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      // Only allow numbers and one decimal point
+      const value = e.target.value.replace(/[^0-9.]/g, '')
+      if (value.split('.').length > 2) return // Prevent multiple decimal points
+      setAmount(value)
+    }
+  
+    const handleSubmit = () => {
+      console.log('Sending amount:', parseFloat(amount))
+      // Add your send logic here
+    }
     return (
 
         <div className="grid grid-cols-12 gap-6 h-screen">
             <div className="col-span-8  p-6">
                 <div className="flex justify-between items-center">
 
-                    <h2 className=" text-lg font-semibold mb-2 text-#343C6A">My Cards</h2>
-                    <h3 className=" text-lg font-semibold mb-2 text-#343C6A">See All</h3>
+                    <h2 className=" text-lg font-semibold mb-2 text-[#343C6A]">My Cards</h2>
+                    <h3 className=" text-lg font-semibold mb-2 text-[#343C6A]">See All</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-6">
 
 
-                    <div className="p-4 text-white rounded-2xl w-[310px] h-[220px] relative"
+                    <div className="p-4 text-white border-[1px] border-[#DFEAF2] rounded-2xl w-[310px] h-[220px] relative"
                         style={{
                             background: "linear-gradient(90deg, rgba(91, 90, 111, 1) 0%, rgba(0, 0, 0, 1) 100%)",
                         }}>
@@ -64,7 +102,6 @@ export const Dashboard = () => {
                                 <h3 className="text-[18px] font-semibold tracking-tight">$5,332.18</h3>
                             </div>
                             <img
-
                                 src={Chip}
                                 alt="Chip Card"
                                 className="h-8 w-8 z-10"
@@ -98,20 +135,20 @@ export const Dashboard = () => {
                         </div>
                     </div>
 
-                    <div className="p-4 text-[#343C6A] rounded-2xl w-[310px] h-[220px] bg-white"
-                        >
-                        <div className="flex justify-between items-center">
+                    <div className="p-4 text-[#343C6A] rounded-2xl w-[310px] h-[220px] relative bg-white border-[1px] border-[#DFEAF2]"
+                      >
+                        <div className="flex justify-between items-center ">
                             <div className="text-left">
                                 <p className="text-sm font-medium ">Balance</p>
                                 <h3 className="text-[18px] font-semibold tracking-tight">$5,332.18</h3>
                             </div>
                             <img
-                                src={Chip}
+                                src={BlackChip}
                                 alt="Chip Card"
-                                className="h-8 w-8"
+                                className="h-8 w-8 z-10"
                             />
                         </div>
-                        <div className="mt-14">
+                        <div className="mt-7">
                             <div className="flex justify-between mb-6">
                                 <div>
                                     <p className="text-[#9BA0AB] text-sm font-medium mb-1">CARD HOLDER</p>
@@ -123,14 +160,24 @@ export const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                        <p className="mt-2 text-sm">3778 **** 1234</p>
+                        <div
+                        className="h-[60px] absolute left-0 right-0 bottom-0 rounded-b-2xl border-t-[1px] border-[#DFEAF2]">
+                            <div className="flex justify-between items-center px-4 py-4">
+                                <p className="text-xl font-semibold text-[#343C6A] z-10">3778 **** 1234</p>
+                                <img
+                                    src={BlackGroup}
+                                    alt="Group"
+                                    className="h-15 w-15 z-10"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Recent Transactions */}
             <div className="col-span-4 p-6 ">
-                <h2 className="text-lg text-left font-semibold mb-2 text-#343C6A">Recent Transactions</h2>
+                <h2 className="text-lg text-left font-semibold mb-2 ">Recent Transactions</h2>
 
                 <div className=" bg-white p-6 rounded-lg shadow-md">
                     <div className="space-y-4">
@@ -162,7 +209,7 @@ export const Dashboard = () => {
             {/* Weekly Activity */}
 
             <div className="col-span-8 p-6 ">
-    <h2 className=" text-lg text-left font-semibold mb-2 text-#343C6A">Weekly Activity</h2>
+    <h2 className=" text-lg text-left font-semibold mb-2 ">Weekly Activity</h2>
     <div className=" bg-white rounded-lg shadow-md flex items-center justify-center h-[280px]">
         <div className="p-6">
             <BarChart width={630} height={250} data={data}>
@@ -194,7 +241,7 @@ export const Dashboard = () => {
 
             {/* Expense Statistics */}
             <div className="col-span-4 p-6 ">
-                <h2 className=" text-lg text-left font-semibold mb-2 text-#343C6A">Expense Statistics</h2>
+                <h2 className=" text-lg text-left font-semibold mb-2 ">Expense Statistics</h2>
                 <div className=" bg-white h-[280px] flex items-center justify-center rounded-lg shadow-md">
                     <div className="flex items-center justify-center h-40">
                         <PieChart width={730} height={250}>
@@ -231,64 +278,59 @@ export const Dashboard = () => {
 
             {/* Quick Transfer */}
             <div className="col-span-6 p-6">
-                <h2 className="text-lg text-left font-semibold mb-2 text-#343C6A">Balance History</h2>
-                <div className="bg-white rounded-lg shadow-md h-[500px] p-4">
-                    {/* Livia Bator */}
-                    <div className="flex items-center space-x-4 mb-4">
-                        <div className="flex items-center space-x-2">
-                            <img
-                                src="https://via.placeholder.com/40"
-                                alt="User"
-                                className="w-10 h-10 rounded-full"
-                            />
-                            <div>
-                                <p className="font-semibold">Livia Bator</p>
-                                <p className="text-sm text-gray-500">CEO</p>
+                <h2 className="text-lg text-left font-semibold mb-2 ">Quick Transfer</h2>
+                <div className="bg-white rounded-lg shadow-md  p-6">
+                    <div className="flex gap-4 justify-start">
+                        {users.map((user, index) => (
+                            <div key={index} className="flex flex-col items-center p-4 rounded-lg cursor-pointer">
+                                <div className="mb-3">
+                                    <img
+                                        src={user.ProfilePicture}
+                                        alt={user.name}
+                                        className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-sm"
+                                    />
+                                </div>
+                                <div className="text-center">
+                                    <h4 className="font-medium text-gray-900 mb-1">{user.name}</h4>
+                                    <p className="text-sm text-gray-500">{user.position}</p>
+                                </div>
                             </div>
+                        ))}
+                        <div className=" rounded-full p-2  flex flex-col justify-center item-center cursor-pointer">
+                              <ChevronRight height="23px" width="23px" className=" text-[#718EBF] cursor-pointer" />
                         </div>
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="$525.50"
-                                className="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none"
-                            />
-                        </div>
-                        <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg">
-                            Send
-                            <ArrowRight className="ml-2" />
-                        </button>
+                        
                     </div>
-
-                    {/* Randy Press */}
-                    <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                            <img
-                                src="https://via.placeholder.com/40"
-                                alt="User"
-                                className="w-10 h-10 rounded-full"
-                            />
-                            <div>
-                                <p className="font-semibold">Randy Press</p>
-                                <p className="text-sm text-gray-500">Director</p>
-                            </div>
-                        </div>
-                        <div>
-                            <input
+                    <div className="flex justify-between items-center mt-6">
+                        <p className="text-sm font-medium ">Write Amount</p>
+                        <div className="relative w-[70%]">
+                            <Input
                                 type="text"
-                                placeholder="$525.50"
-                                className="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none"
+                                value={amount}
+                                onChange={handleAmountChange}
+                                className="w-full py-6 pl-8 pr-24 rounded-full text-lg font-medium bg-gray-50"
+                                placeholder="0.00"
                             />
+                            {amount && (
+                                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-lg font-medium text-gray-600">
+                                    ₹
+                                </span>
+                            )}
+                            <Button
+                                onClick={handleSubmit}
+                                className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white px-6 py-4 rounded-full flex items-center gap-2 hover:bg-gray-800 h-auto"
+                            >
+                                Send
+                                <Send className="w-4 h-4" />
+                            </Button>
                         </div>
-                        <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg">
-                            Send
-                            <ArrowRight className="ml-2" />
-                        </button>
                     </div>
                 </div>
             </div>
+
             {/* Balance History */}
             <div className="col-span-6 p-6 ">
-                <h2 className=" text-lg text-left font-semibold mb-2 text-#343C6A">Balance History</h2>
+                <h2 className=" text-lg text-left font-semibold mb-2 ">Balance History</h2>
 
                 <div className=" bg-white rounded-lg flex items-center justify-center shadow-md h-[300px]">
                     <div className=" items-center justify-center h-40">
