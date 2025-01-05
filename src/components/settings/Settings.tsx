@@ -1,224 +1,193 @@
-import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { PencilIcon } from "lucide-react";
+import ProfileImage from "../../assets/christina.jpg";
 
-const Settings = () => {
-  interface FormData {
-    name: string;
-    username: string;
-    email: string;
-    password: string;
-    dob: string;
-    presentAddress: string;
-    permanentAddress: string;
-    city: string;
-    postalCode: string;
-    country: string;
-  }
+interface FormData {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  dob: string;
+  presentAddress: string;
+  permanentAddress: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
 
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    username: '',
-    email: '',
-    password: '',
-    dob: '',
-    presentAddress: '',
-    permanentAddress: '',
-    city: '',
-    postalCode: '',
-    country: '',
-  });
+const ProfileImageSection = ({ onClick }: { onClick: () => void }) => (
+  <div className="w-[100px]">
+    <div className="flex flex-col items-center space-y-4">
+      <div className="relative w-[90px] h-[90px]">
+        <div className="w-full h-full border-gray-300 rounded-full flex items-center justify-center overflow-hidden">
+          <img
+            src={ProfileImage}
+            alt="profile"
+            className="w-[110px] h-full rounded-full object-cover"
+          />
+        </div>
+        <div 
+          onClick={onClick}
+          className="absolute bottom-0 right-0 bg-[#232323] rounded-full p-1 shadow-md cursor-pointer"
+        >
+          <PencilIcon color="white" className="w-4 h-4 m-[2px]" />
+        </div>
+      </div>
+      <input type="file" accept="image/*" className="hidden" id="profile-image" />
+    </div>
+  </div>
+);
 
+const useFormValidation = (formData: FormData) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.username) newErrors.username = 'Username is required';
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.username) newErrors.username = "Username is required";
     if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Valid email is required';
+      newErrors.email = "Valid email is required";
     }
     if (!formData.password || formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
     }
-    if (!formData.dob) newErrors.dob = 'Date of Birth is required';
-    if (!formData.presentAddress) newErrors.presentAddress = 'Present Address is required';
-    if (!formData.city) newErrors.city = 'City is required';
+    if (!formData.dob) newErrors.dob = "Date of Birth is required";
+    if (!formData.presentAddress) newErrors.presentAddress = "Present Address is required";
+    if (!formData.city) newErrors.city = "City is required";
     if (!formData.postalCode || !/^\d+$/.test(formData.postalCode)) {
-      newErrors.postalCode = 'Valid Postal Code is required';
+      newErrors.postalCode = "Valid Postal Code is required";
     }
-    if (!formData.country) newErrors.country = 'Country is required';
+    if (!formData.country) newErrors.country = "Country is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  return { errors, validate };
+};
+
+const Settings = () => {
+  const [formData, setFormData] = useState<FormData>({
+    name: "", username: "", email: "", password: "", dob: "",
+    presentAddress: "", permanentAddress: "", city: "", postalCode: "", country: ""
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const { errors, validate } = useFormValidation(formData);
+
+  const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validate()) {
-      console.log('Form Submitted:', formData);
+      console.log("Form Submitted:", formData);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://jsonplaceholder.typicode.com/users");
+        const [user] = await response.json();
+        if (user) {
+          setFormData(prev => ({
+            ...prev,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            presentAddress: user.address.street,
+            permanentAddress: user.address.suite,
+            city: user.address.city,
+            postalCode: user.address.zipcode,
+            country: "USA",
+          }));
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const renderInput = (label: string, name: keyof FormData, type: string = "text") => (
+    <div>
+      <label className="block text-sm font-medium mb-2 text-gray-600">
+        {label}
+      </label>
+      <input
+        type={type}
+        name={name}
+        value={formData[name]}
+        onChange={handleChange}
+        className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
+      {errors[name] && <p className="text-red-500 text-sm">{errors[name]}</p>}
+    </div>
+  );
+
+  if (isLoading) {
+    return <div className="h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="h-screen">
       <div className="bg-white h-auto w-[800px] mx-auto my-10 p-6 rounded-lg">
-        <Tabs defaultValue="profile" className=" w-full">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs defaultValue="profile" className="w-full">
+          <TabsList className="flex justify-start mb gap-8">
             <TabsTrigger value="profile" className="text-gray-600">Profile</TabsTrigger>
             <TabsTrigger value="preferences" className="text-gray-600">Preferences</TabsTrigger>
             <TabsTrigger value="security" className="text-gray-600">Security</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile" className="p-4">
-           
-            <form onSubmit={handleSubmit} className="space-y-4 text-left mt-5">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Your Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">User Name</label>
-                  <input
-                    type="text"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
-                </div>
-              </div>
+            <div className="flex gap-8">
+              <ProfileImageSection 
+                onClick={() => document.getElementById("profile-image")?.click()} 
+              />
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              <form onSubmit={handleSubmit} className="space-y-4 text-left mt-5 w-3/4">
+                <div className="grid grid-cols-2 gap-4">
+                  {renderInput("Your Name", "name")}
+                  {renderInput("User Name", "username")}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Password</label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                <div className="grid grid-cols-2 gap-4">
+                  {renderInput("Email", "email", "email")}
+                  {renderInput("Password", "password", "password")}
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Date of Birth</label>
-                  <input
-                    type="date"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
+                <div className="grid grid-cols-2 gap-4">
+                  {renderInput("Date of Birth", "dob", "date")}
+                  {renderInput("Present Address", "presentAddress")}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Present Address</label>
-                  <input
-                    type="text"
-                    name="presentAddress"
-                    value={formData.presentAddress}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.presentAddress && <p className="text-red-500 text-sm">{errors.presentAddress}</p>}
+                <div className="grid grid-cols-2 gap-4">
+                  {renderInput("Permanent Address", "permanentAddress")}
+                  {renderInput("City", "city")}
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Permanent Address</label>
-                  <input
-                    type="text"
-                    name="permanentAddress"
-                    value={formData.permanentAddress}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  {renderInput("Postal Code", "postalCode")}
+                  {renderInput("Country", "country")}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">City</label>
-                  <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Postal Code</label>
-                  <input
-                    type="text"
-                    name="postalCode"
-                    value={formData.postalCode}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.postalCode && <p className="text-red-500 text-sm">{errors.postalCode}</p>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Country</label>
-                  <input
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
-                </div>
-              </div>
 
                 <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
-                >
-                  Save
-                </button>
+                  <button
+                    type="submit"
+                    className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
+                  >
+                    Save
+                  </button>
                 </div>
-            </form>
+              </form>
+            </div>
           </TabsContent>
 
           <TabsContent value="preferences" className="p-4">
             <h3 className="text-lg font-semibold">Preferences</h3>
-            {/* Add your preferences settings here */}
           </TabsContent>
 
           <TabsContent value="security" className="p-4">
             <h3 className="text-lg font-semibold">Security</h3>
-            {/* Add your security settings here */}
           </TabsContent>
         </Tabs>
       </div>
