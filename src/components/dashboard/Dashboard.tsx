@@ -2,10 +2,10 @@ import { ArrowRight } from "lucide-react";
 import Chip from "../../assets/Chip.png";
 import Group from "../../assets/group.svg";
 
-import { Bar, BarChart, CartesianGrid, Tooltip, Legend, XAxis, YAxis, PieChart, Pie, AreaChart, Area, Cell } from "recharts";
+import { Bar, BarChart, CartesianGrid, Tooltip, Legend, XAxis, YAxis,  Pie, AreaChart, Area, Cell, PieChart, Text } from "recharts";
 
 export const Dashboard = () => {
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    const COLORS = ['#FC7900', '#343C6A', '#396AFF', '#232323'];
     const data = [
         { "name": "Sat", "uv": 400, "pv": 240 },
         { "name": "Sun", "uv": 300, "pv": 139 },
@@ -32,6 +32,15 @@ export const Dashboard = () => {
             "name": "Group D",
             "value": 150 // 20%
         }
+    ];
+    const BalanceData = [
+        { "name": "Jul", "value": 370 },
+        { "name": "Aug", "value": 220 },
+        { "name": "Sep", "value": 500 },
+        { "name": "Oct", "value": 530 },
+        { "name": "Nov", "value": 800 },
+        { "name": "Dec", "value": 200 },
+        { "name": "Jan", "value": 600 }
     ];
     return (
 
@@ -200,8 +209,19 @@ export const Dashboard = () => {
                                 dataKey="value"
                                 label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                             >
-                                {data01.map((_entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                {data01.map((entry, index) => (
+                                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}>
+                                   <Text
+                                       x="50%"
+                                       y="50%"
+                                       fill="#fff"
+                                       textAnchor="middle"
+                                       dominantBaseline="central"
+                                       fontSize={14}
+                                   >
+                                       {`${entry.value}`}
+                                   </Text>
+                               </Cell>
                                 ))}
                             </Pie>
                         </PieChart>
@@ -272,22 +292,34 @@ export const Dashboard = () => {
 
                 <div className=" bg-white rounded-lg flex items-center justify-center shadow-md h-[300px]">
                     <div className=" items-center justify-center h-40">
-                        <AreaChart width={450} height={250} data={data}
-                            margin={{ top: 0, right: 30, left: 0, bottom: 50 }}>
+                        <AreaChart 
+                            width={450} 
+                            height={250} 
+                            data={BalanceData}
+                            margin={{ top: 0, right: 30, left: 0, bottom: 50 }}
+                        >
                             <defs>
-
-                                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                                <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#2D60FF" stopOpacity="25%" />
+                                    <stop offset="95%" stopColor="#2D60FF" stopOpacity="0%"/>
                                 </linearGradient>
                             </defs>
                             <XAxis dataKey="name" />
-                            <YAxis />
+                            <YAxis 
+                                domain={[0, 1000]}
+                                ticks={[0, 200, 400, 600, 800]}
+                            />
                             <CartesianGrid strokeDasharray="3 3" />
                             <Tooltip />
-                            <Area type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+                            <Area 
+                                type="monotone" 
+                                dataKey="value" 
+                                stroke="#1814F3" 
+                                strokeWidth={2}
+                                fillOpacity={10} 
+                                fill="url(#colorValue)" 
+                            />
                         </AreaChart>
-
                     </div>
                 </div>
             </div>
