@@ -1,71 +1,36 @@
 import { ArrowRight } from "lucide-react";
-import ChipCard from "../../assets/chip.svg";
-import CardNumber from "../../assets/rectangle.svg"
+import Chip from "../../assets/Chip.png";
+import Group from "../../assets/group.svg";
+
 import { Bar, BarChart, CartesianGrid, Tooltip, Legend, XAxis, YAxis, PieChart, Pie, AreaChart, Area, Cell } from "recharts";
 
 export const Dashboard = () => {
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
     const data = [
-        {
-            "name": "Page A",
-            "uv": 4000,
-            "pv": 2400
-        },
-        {
-            "name": "Page B",
-            "uv": 3000,
-            "pv": 1398
-        },
-        {
-            "name": "Page C",
-            "uv": 2000,
-            "pv": 9800
-        },
-        {
-            "name": "Page D",
-            "uv": 2780,
-            "pv": 3908
-        },
-        {
-            "name": "Page E",
-            "uv": 1890,
-            "pv": 4800
-        },
-        {
-            "name": "Page F",
-            "uv": 2390,
-            "pv": 3800
-        },
-        {
-            "name": "Page G",
-            "uv": 3490,
-            "pv": 4300
-        }
+        { "name": "Sat", "uv": 400, "pv": 240 },
+        { "name": "Sun", "uv": 300, "pv": 139 },
+        { "name": "Mon", "uv": 200, "pv": 480 },
+        { "name": "Tue", "uv": 278, "pv": 390 },
+        { "name": "Wed", "uv": 189, "pv": 480 },
+        { "name": "Thu", "uv": 239, "pv": 380 },
+        { "name": "Fri", "uv": 349, "pv": 430 }
     ];
     const data01 = [
         {
             "name": "Group A",
-            "value": 400
+            "value": 300  // 30%
         },
         {
             "name": "Group B",
-            "value": 300
+            "value": 200  // 15%
         },
         {
             "name": "Group C",
-            "value": 300
+            "value": 350  // 35%
         },
         {
             "name": "Group D",
-            "value": 200
-        },
-        {
-            "name": "Group E",
-            "value": 278
-        },
-        {
-            "name": "Group F",
-            "value": 189
+            "value": 150 // 20%
         }
     ];
     return (
@@ -80,22 +45,23 @@ export const Dashboard = () => {
                 <div className="grid grid-cols-2 gap-6">
 
 
-                    <div className="p-4 text-white rounded-2xl w-[335px] h-[230px]"
+                    <div className="p-4 text-white rounded-2xl w-[310px] h-[220px] relative"
                         style={{
                             background: "linear-gradient(90deg, rgba(91, 90, 111, 1) 0%, rgba(0, 0, 0, 1) 100%)",
                         }}>
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center ">
                             <div className="text-left">
                                 <p className="text-sm font-medium ">Balance</p>
                                 <h3 className="text-[18px] font-semibold tracking-tight">$5,332.18</h3>
                             </div>
                             <img
-                                src={ChipCard}
+
+                                src={Chip}
                                 alt="Chip Card"
-                                className="h-8 w-8"
+                                className="h-8 w-8 z-10"
                             />
                         </div>
-                        <div className="mt-14">
+                        <div className="mt-7">
                             <div className="flex justify-between mb-6">
                                 <div>
                                     <p className="text-[#9BA0AB] text-sm font-medium mb-1">CARD HOLDER</p>
@@ -108,25 +74,30 @@ export const Dashboard = () => {
                             </div>
                         </div>
                         <div
-                        className="h-[70px] w-[335px]"
+                        className="h-[60px] absolute left-0 right-0 bottom-0 rounded-b-2xl"
                         style={{
                             background: "linear-gradient(90deg,rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%)",
                         }}>
-                        <p className="mt-2 text-sm">3778 **** 1234</p>
+                            <div className="flex justify-between items-center px-4 py-4">
+                                <p className="text-xl font-semibold text-white z-10">3778 **** 1234</p>
+                                <img
+                                    src={Group}
+                                    alt="Group"
+                                    className="h-15 w-15 z-10"
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="p-4 text-white rounded-2xl w-[335px] h-[230px]"
-                        style={{
-                            background: "linear-gradient(90deg, rgba(91, 90, 111, 1) 0%, rgba(0, 0, 0, 1) 100%)",
-                        }}>
+                    <div className="p-4 text-[#343C6A] rounded-2xl w-[310px] h-[220px] bg-white"
+                        >
                         <div className="flex justify-between items-center">
                             <div className="text-left">
                                 <p className="text-sm font-medium ">Balance</p>
                                 <h3 className="text-[18px] font-semibold tracking-tight">$5,332.18</h3>
                             </div>
                             <img
-                                src={ChipCard}
+                                src={Chip}
                                 alt="Chip Card"
                                 className="h-8 w-8"
                             />
@@ -182,24 +153,35 @@ export const Dashboard = () => {
             {/* Weekly Activity */}
 
             <div className="col-span-8 p-6 ">
-                <h2 className=" text-lg text-left font-semibold mb-2 text-#343C6A">Weekly Activity</h2>
-                <div className=" bg-white rounded-lg shadow-md flex items-center justify-center h-[280px]">
-                    <div className="p-6  ">
+    <h2 className=" text-lg text-left font-semibold mb-2 text-#343C6A">Weekly Activity</h2>
+    <div className=" bg-white rounded-lg shadow-md flex items-center justify-center h-[280px]">
+        <div className="p-6">
+            <BarChart width={630} height={250} data={data}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis 
+                    domain={[0, 500]}
+                    ticks={[0, 100, 200, 300, 400, 500]}
+                    tickCount={6}
+                />
+                <Tooltip />
+                
+                <Legend 
+                    layout="horizontal" 
+                    align="right" 
+                    verticalAlign="top"
+                   
+                />
 
-                        <BarChart width={630} height={250} data={data}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="pv" fill="#8884d8" />
-                            <Bar dataKey="uv" fill="#82ca9d" />
+             
+                <Bar dataKey="pv" fill="#232323" radius={[20, 20, 20, 20]} barSize={15} />
+                <Bar dataKey="uv" fill="#396AFF" radius={[20, 20, 20, 20]} barSize={15} />
+            </BarChart>
+        </div>
+    </div>
+</div>
 
-                        </BarChart>
 
-                    </div>
-                </div>
-            </div>
 
             {/* Expense Statistics */}
             <div className="col-span-4 p-6 ">
@@ -213,6 +195,7 @@ export const Dashboard = () => {
                                 cy="50%"
                                 labelLine={false}
                                 outerRadius={100}
+                                strokeWidth={10}
                                 fill="#8884d8"
                                 dataKey="value"
                                 label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
