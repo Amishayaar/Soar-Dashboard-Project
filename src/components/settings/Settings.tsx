@@ -133,47 +133,47 @@ const Settings = () => {
   }
 
   return (
-    <div className="h-screen">
-      <div className="bg-white h-auto w-[800px] mx-auto my-10 p-6 rounded-lg">
+    <div className="min-h-screen p-4">
+      <div className="bg-white w-full max-w-[800px] mx-auto my-4 lg:my-10 p-4 lg:p-6 rounded-lg">
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="flex justify-start mb gap-8">
+          <TabsList className="flex flex-wrap justify-start gap-4 lg:gap-8 mb-6">
             <TabsTrigger value="profile" className="text-gray-600">Profile</TabsTrigger>
             <TabsTrigger value="preferences" className="text-gray-600">Preferences</TabsTrigger>
             <TabsTrigger value="security" className="text-gray-600">Security</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="profile" className="p-4">
-            <div className="flex gap-8">
+          <TabsContent value="profile" className="p-2 lg:p-4">
+            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
               <ProfileImageSection 
                 onClick={() => document.getElementById("profile-image")?.click()} 
               />
 
-              <form onSubmit={handleSubmit} className="space-y-4 text-left mt-5 w-3/4">
-                <div className="grid grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-4 text-left w-full lg:w-3/4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {renderInput("Your Name", "name")}
                   {renderInput("User Name", "username")}
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {renderInput("Email", "email", "email")}
                   {renderInput("Password", "password", "password")}
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {renderInput("Date of Birth", "dob", "date")}
                   {renderInput("Present Address", "presentAddress")}
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {renderInput("Permanent Address", "permanentAddress")}
                   {renderInput("City", "city")}
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {renderInput("Postal Code", "postalCode")}
                   {renderInput("Country", "country")}
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-end pt-4">
                   <button
                     type="submit"
-                    className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
+                    className="bg-black text-white px-6 py-2.5 rounded-md hover:bg-gray-800 transition-colors w-full md:w-auto"
                   >
                     Save
                   </button>

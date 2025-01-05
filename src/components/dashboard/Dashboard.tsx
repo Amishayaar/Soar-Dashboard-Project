@@ -191,29 +191,25 @@ const PieChartComponent = ({ data }: { data: ChartData[] }) => {
 export const Dashboard = () => {
   const { amount, handleAmountChange } = useAmountInput();
 
-  const handleSubmit = () => {
-    console.log('Sending amount:', parseFloat(amount));
-  };
-
   return (
-    <div className="grid grid-cols-12 gap-6 p-6 mx-auto max-w-[1600px] w-full overflow-x-hidden">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 p-3 lg:p-6 mx-auto max-w-[1600px] w-full overflow-x-hidden">
       {/* Cards Section */}
-      <div className="col-span-8">
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold mb-2 text-[#343C6A]">My Cards</h2>
-          <h3 className="text-lg font-semibold mb-2 text-[#343C6A]">See All</h3>
+      <div className="col-span-12 lg:col-span-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold text-[#343C6A]">My Cards</h2>
+          <h3 className="text-lg font-semibold text-[#343C6A]">See All</h3>
         </div>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
           <CardComponent />
           <CardComponent isBlack />
         </div>
       </div>
 
       {/* Recent Transactions */}
-      <div className="col-span-4">
-        <h2 className="text-lg text-left font-semibold mb-2">Recent Transactions</h2>
-        <div className="bg-white p-3 rounded-lg shadow-md">
-          <div className="space-y-4">
+      <div className="col-span-12 lg:col-span-4">
+        <h2 className="text-lg text-left font-semibold mb-4">Recent Transactions</h2>
+        <div className="bg-white p-4 rounded-lg shadow-md">
+          <div className="space-y-6">
             {STATIC_DATA.transactions.map((transaction, index) => (
               <TransactionItem key={index} transaction={transaction} />
             ))}
@@ -222,10 +218,10 @@ export const Dashboard = () => {
       </div>
 
       {/* Weekly Activity */}
-      <div className="col-span-8">
-        <h2 className=" text-lg text-left font-semibold mb-2 ">Weekly Activity</h2>
-        <div className=" bg-white rounded-lg shadow-md flex items-center justify-center h-[280px]">
-          <div className="w-full p-6">
+      <div className="col-span-12 lg:col-span-8">
+        <h2 className="text-lg text-left font-semibold mb-4">Weekly Activity</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 overflow-x-auto">
+          <div className="min-w-[500px] h-[280px] flex items-center justify-center">
             <BarChart width={550} height={250} data={STATIC_DATA.weeklyData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
@@ -248,22 +244,22 @@ export const Dashboard = () => {
       </div>
 
       {/* Expense Statistics */}
-      <div className="col-span-4">
-        <h2 className=" text-lg text-left font-semibold mb-2 ">Expense Statistics</h2>
-        <div className=" bg-white h-[280px] flex items-center justify-center rounded-lg shadow-md">
-          <div className="flex items-center justify-center h-40">
+      <div className="col-span-12 lg:col-span-4">
+        <h2 className="text-lg text-left font-semibold mb-4">Expense Statistics</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 overflow-x-auto">
+          <div className="min-w-[300px] h-[280px] flex items-center justify-center">
             <PieChartComponent data={STATIC_DATA.pieData} />
           </div>
         </div>
       </div>
 
       {/* Quick Transfer */}
-      <div className="col-span-6">
-        <h2 className="text-lg font-semibold mb-2">Quick Transfer</h2>
-        <div className="bg-white rounded-lg shadow-md p-6 h-[300px]">
-          <div className="flex gap-4 justify-start">
+      <div className="col-span-12 lg:col-span-6">
+        <h2 className="text-lg font-semibold mb-4">Quick Transfer</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 lg:p-6">
+          <div className="flex gap-4 overflow-x-auto pb-4">
             {STATIC_DATA.users.map((user, index) => (
-              <div key={index} className="flex flex-col items-center p-4 rounded-lg cursor-pointer">
+              <div key={index} className="flex-shrink-0 flex flex-col items-center p-4 rounded-lg cursor-pointer">
                 <div className="mb-3">
                   <img
                     src={user.ProfilePicture}
@@ -277,13 +273,13 @@ export const Dashboard = () => {
                 </div>
               </div>
             ))}
-            <div className=" rounded-full p-2  flex flex-col justify-center item-center cursor-pointer">
-              <ChevronRight height="23px" width="23px" className=" text-[#718EBF] cursor-pointer" />
+            <div className="flex-shrink-0 rounded-full p-2 flex flex-col justify-center items-center cursor-pointer">
+              <ChevronRight height="23px" width="23px" className="text-[#718EBF]" />
             </div>
           </div>
-          <div className="flex justify-between items-center mt-6">
-            <p className="text-sm font-medium ">Write Amount</p>
-            <div className="relative w-[70%]">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mt-6">
+            <p className="text-sm font-medium">Write Amount</p>
+            <div className="relative w-full lg:w-[70%]">
               <Input
                 type="text"
                 value={amount}
@@ -297,7 +293,7 @@ export const Dashboard = () => {
                 </span>
               )}
               <Button
-                onClick={handleSubmit}
+                onClick={() => console.log('Sending amount:', parseFloat(amount))}
                 className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white px-6 py-4 rounded-full flex items-center gap-2 hover:bg-gray-800 h-auto"
               >
                 Send
@@ -309,10 +305,10 @@ export const Dashboard = () => {
       </div>
 
       {/* Balance History */}
-      <div className="col-span-6">
-        <h2 className=" text-lg text-left font-semibold mb-2 ">Balance History</h2>
-        <div className=" bg-white rounded-lg flex items-center  shadow-md h-[300px]">
-          <div className=" ">
+      <div className="col-span-12 lg:col-span-6">
+        <h2 className="text-lg text-left font-semibold mb-4">Balance History</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 overflow-x-auto">
+          <div className="min-w-[400px] h-[280px] flex items-center justify-center">
             <AreaChart 
               width={450} 
               height={280} 
